@@ -1,11 +1,11 @@
 <?php
-// Uninstall template for WP Outdated Content. Copy to your plugin root as uninstall.php and adjust option names if needed.
+// Uninstall routine for WP Outdated Content.
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
-// Options to remove. Adjust names if your plugin uses different keys.
+// Delete plugin options (single and multisite network-wide where applicable).
 $option_names = array(
     'wp_outdated_content_options',
     'wp_outdated_content_version',
@@ -25,6 +25,7 @@ $meta_keys = array(
 
 global $wpdb;
 foreach ( $meta_keys as $meta_key ) {
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
     $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s", $meta_key ) );
 }
 
