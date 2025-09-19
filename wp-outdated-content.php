@@ -311,10 +311,14 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
 
         public function enqueue_frontend_assets() {
             $opts = $this->get_options();
-            $css_enabled = apply_filters( 'adiscon_outdated_css_enabled', ! empty( $opts['css_enable'] ) );
-            $css_enabled = apply_filters( 'wp_outdated_css_enabled', $css_enabled );
-            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
-            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', $use_theme_styling );
+            $css_enabled = apply_filters( 'wp_outdated_css_enabled', ! empty( $opts['css_enable'] ) );
+            if ( function_exists( 'apply_filters_deprecated' ) ) {
+                $css_enabled = apply_filters_deprecated( 'adiscon_outdated_css_enabled', [ $css_enabled ], '1.0.1', 'wp_outdated_css_enabled' );
+            }
+            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
+            if ( function_exists( 'apply_filters_deprecated' ) ) {
+                $use_theme_styling = apply_filters_deprecated( 'adiscon_outdated_use_theme_styling', [ $use_theme_styling ], '1.0.1', 'wp_outdated_use_theme_styling' );
+            }
             if ( is_admin() || empty( $opts['enable'] ) || ! $css_enabled ) {
                 return;
             }
@@ -480,8 +484,10 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             $label = apply_filters( 'adiscon_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
             $label = apply_filters( 'wp_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
 
-            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
-            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', $use_theme_styling );
+            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
+            if ( function_exists( 'apply_filters_deprecated' ) ) {
+                $use_theme_styling = apply_filters_deprecated( 'adiscon_outdated_use_theme_styling', [ $use_theme_styling ], '1.0.1', 'wp_outdated_use_theme_styling' );
+            }
             $theme_class = $use_theme_styling ? ' ocb--theme' : '';
             $html  = '<aside role="note" class="ocb ocb--' . esc_attr( $state ) . $theme_class . '">';
             $html .= '<span class="ocb-label">' . wp_kses_post( $label ) . '</span>';
