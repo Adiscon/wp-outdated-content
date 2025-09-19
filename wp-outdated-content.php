@@ -1,9 +1,9 @@
-git<?php
+<?php
 /**
  * Plugin Name:       WP Outdated Content
  * Description:       Adds an accessible, configurable notice to outdated posts/pages with thresholds, labels, and colors.
  * Version:           1.0.0
- * Author:            Andre Lorbach
+ * Author:            Adiscon GmbH
  * Text Domain:       wp-outdated-content
  * Domain Path:       /languages
  * Requires at least: 6.0
@@ -11,6 +11,7 @@ git<?php
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
+ *  Coding:            Andre Lorbach (See alorbach github profile)
  * (c) 2025 Adiscon GmbH
  */
 
