@@ -13,4 +13,9 @@
   .ocb--danger{color:var(--ocb-danger-text,#ffcdd2)}
 }
 
+/* Theme integration: when enabled, let the site theme control colors and label style */
+.ocb.ocb--theme{border-color:currentColor;background:transparent}
+.ocb.ocb--theme.ocb--warn,.ocb.ocb--theme.ocb--danger{color:inherit}
+.ocb.ocb--theme .ocb-label{font:inherit;color:inherit}
+
 
