@@ -56,6 +56,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             return [
                 'enable'              => 1,
                 'css_enable'          => 1,
+                'theme_styling'       => 0,
                 'jsonld_enable'       => 1,
                 'jsonld_type'         => 'Article',
                 'post_types'          => 'post,page',
@@ -108,6 +109,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
 
             $this->add_field( 'enable', 'aoc_general', __( 'Enable', 'wp-outdated-content' ), 'checkbox' );
             $this->add_field( 'css_enable', 'aoc_general', __( 'Load built-in CSS', 'wp-outdated-content' ), 'checkbox' );
+            $this->add_field( 'theme_styling', 'aoc_general', __( 'Use theme styling (colors and label style)', 'wp-outdated-content' ), 'checkbox' );
             $this->add_field( 'jsonld_enable', 'aoc_general', __( 'Output JSON-LD', 'wp-outdated-content' ), 'checkbox' );
             $this->add_field( 'jsonld_type', 'aoc_general', __( 'JSON-LD type(s)', 'wp-outdated-content' ), 'jsonld_types' );
             $this->add_field( 'post_types', 'aoc_general', __( 'Post types', 'wp-outdated-content' ), 'post_types' );
@@ -216,6 +218,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
 
             $out['enable'] = empty( $out['enable'] ) ? 0 : 1;
             $out['css_enable'] = empty( $out['css_enable'] ) ? 0 : 1;
+            $out['theme_styling'] = empty( $out['theme_styling'] ) ? 0 : 1;
             $out['jsonld_enable'] = empty( $out['jsonld_enable'] ) ? 0 : 1;
 
             $available_types = get_post_types( [ 'public' => true ], 'names' );
@@ -299,32 +302,35 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         public function enqueue_frontend_assets() {
             $opts = $this->get_options();
             $css_enabled = apply_filters( 'adiscon_outdated_css_enabled', ! empty( $opts['css_enable'] ) );
+            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
             if ( is_admin() || empty( $opts['enable'] ) || ! $css_enabled ) {
                 return;
             }
             $handle = 'wp-outdated-content';
             $src    = plugins_url( 'assets/frontend.css', __FILE__ );
             wp_enqueue_style( $handle, $src, [], self::VERSION );
-            $light_vars = sprintf(
-                '--ocb-warn-bg:%1$s;--ocb-warn-border:%2$s;--ocb-danger-bg:%3$s;--ocb-danger-border:%4$s;--ocb-warn-text:%5$s;--ocb-danger-text:%6$s;',
-                esc_attr( $opts['warn_bg'] ),
-                esc_attr( $opts['warn_border'] ),
-                esc_attr( $opts['danger_bg'] ),
-                esc_attr( $opts['danger_border'] ),
-                esc_attr( $opts['warn_text'] ),
-                esc_attr( $opts['danger_text'] )
-            );
-            $dark_vars = sprintf(
-                '--ocb-warn-bg:%1$s;--ocb-warn-border:%2$s;--ocb-danger-bg:%3$s;--ocb-danger-border:%4$s;--ocb-warn-text:%5$s;--ocb-danger-text:%6$s;',
-                esc_attr( $opts['warn_bg_dark'] ),
-                esc_attr( $opts['warn_border_dark'] ),
-                esc_attr( $opts['danger_bg_dark'] ),
-                esc_attr( $opts['danger_border_dark'] ),
-                esc_attr( $opts['warn_text_dark'] ),
-                esc_attr( $opts['danger_text_dark'] )
-            );
-            $inline_css = ':root{' . $light_vars . '}' . '@media (prefers-color-scheme: dark){:root{' . $dark_vars . '}}';
-            wp_add_inline_style( $handle, $inline_css );
+            if ( ! $use_theme_styling ) {
+                $light_vars = sprintf(
+                    '--ocb-warn-bg:%1$s;--ocb-warn-border:%2$s;--ocb-danger-bg:%3$s;--ocb-danger-border:%4$s;--ocb-warn-text:%5$s;--ocb-danger-text:%6$s;',
+                    esc_attr( $opts['warn_bg'] ),
+                    esc_attr( $opts['warn_border'] ),
+                    esc_attr( $opts['danger_bg'] ),
+                    esc_attr( $opts['danger_border'] ),
+                    esc_attr( $opts['warn_text'] ),
+                    esc_attr( $opts['danger_text'] )
+                );
+                $dark_vars = sprintf(
+                    '--ocb-warn-bg:%1$s;--ocb-warn-border:%2$s;--ocb-danger-bg:%3$s;--ocb-danger-border:%4$s;--ocb-warn-text:%5$s;--ocb-danger-text:%6$s;',
+                    esc_attr( $opts['warn_bg_dark'] ),
+                    esc_attr( $opts['warn_border_dark'] ),
+                    esc_attr( $opts['danger_bg_dark'] ),
+                    esc_attr( $opts['danger_border_dark'] ),
+                    esc_attr( $opts['warn_text_dark'] ),
+                    esc_attr( $opts['danger_text_dark'] )
+                );
+                $inline_css = ':root{' . $light_vars . '}' . '@media (prefers-color-scheme: dark){:root{' . $dark_vars . '}}';
+                wp_add_inline_style( $handle, $inline_css );
+            }
         }
 
         public function render_docs_section() {
@@ -458,8 +464,10 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             $label = strtr( $label_template, $tokens );
             $label = apply_filters( 'adiscon_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
 
-            $html  = '<aside role="note" class="ocb ocb--' . esc_attr( $state ) . '">';
-            $html .= wp_kses_post( $label );
+            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
+            $theme_class = $use_theme_styling ? ' ocb--theme' : '';
+            $html  = '<aside role="note" class="ocb ocb--' . esc_attr( $state ) . $theme_class . '">';
+            $html .= '<span class="ocb-label">' . wp_kses_post( $label ) . '</span>';
             $html .= ' <span class="ocb-meta">' . esc_html( sprintf( _x( 'Published: %s', 'published date', 'wp-outdated-content' ), $published_date ) ) . '</span>';
             $html .= '</aside>';
 
