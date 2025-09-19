@@ -1,0 +1,14 @@
+/.git
+/.github
+/.wordpress-org
+/node_modules
+/.DS_Store
+/*.zip
+*.log
+composer.lock
+package-lock.json
+README.md
+WPORG-COMPLIANCE-CHECKLIST.md
+assets-manifest.md
+plugin-header.txt
+
