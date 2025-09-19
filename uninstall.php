@@ -6,9 +6,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Delete plugin options (single and multisite network-wide where applicable).
+// Current option key and the legacy key from previous versions.
 $option_names = array(
-    'wp_outdated_content_options',
-    'wp_outdated_content_version',
+    'wp_outdated_content',
+    'adiscon_outdated_content',
 );
 
 foreach ( $option_names as $option_name ) {
