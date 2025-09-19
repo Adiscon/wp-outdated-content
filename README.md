@@ -38,11 +38,13 @@ Adds an accessible, configurable notice to outdated posts/pages with thresholds,
 
 ## Hooks
 
-- `adiscon_outdated_notice_text( $text, $state, $post, $ageMonths, $publishedDate )`
-- `adiscon_outdated_is_applicable( $bool, $post )`
-- `adiscon_outdated_state( $state, $post, $ageMonths, $warnMonths, $dangerMonths )`
-- `adiscon_outdated_tokens( $tokens_array, $post )`
-- `adiscon_outdated_css_enabled( $bool )`
+- `wp_outdated_notice_text( $text, $state, $post, $ageMonths, $publishedDate )`
+- `wp_outdated_is_applicable( $bool, $post )`
+- `wp_outdated_state( $state, $post, $ageMonths, $warnMonths, $dangerMonths )`
+- `wp_outdated_tokens( $tokens_array, $post )`
+- `wp_outdated_css_enabled( $bool )`
+
+Backward compatibility: the previous `adiscon_outdated_*` filters still fire internally.
 
 ## Compatibility
 
