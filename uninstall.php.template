@@ -1,0 +1,30 @@
+<?php
+// Uninstall template for WP Outdated Content. Copy to your plugin root as uninstall.php and adjust option names if needed.
+
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+    exit;
+}
+
+// Options to remove. Adjust names if your plugin uses different keys.
+$option_names = array(
+    'wp_outdated_content_options',
+    'wp_outdated_content_version',
+);
+
+foreach ( $option_names as $option_name ) {
+    delete_option( $option_name );
+    delete_site_option( $option_name );
+}
+
+// Remove per-post override meta used by the plugin.
+$meta_keys = array(
+    'ocb_state',
+    'ocb_threshold_months',
+    'ocb_label_custom',
+);
+
+global $wpdb;
+foreach ( $meta_keys as $meta_key ) {
+    $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s", $meta_key ) );
+}
+
