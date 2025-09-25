@@ -26,7 +26,7 @@ $meta_keys = array(
 
 global $wpdb;
 foreach ( $meta_keys as $meta_key ) {
-    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall script needs to remove all data
     $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s", $meta_key ) );
 }
 
