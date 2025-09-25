@@ -15,6 +15,6 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: wp-outdated-content
+          SLUG: adiscon-outdated-content
           ASSETS_DIR: .wordpress-org
 

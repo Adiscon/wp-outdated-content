@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name:       WP Outdated Content
+ * Plugin Name:       Adiscon Outdated Content
  * Description:       Adds an accessible, configurable notice to outdated posts/pages with thresholds, labels, and colors.
  * Version:           1.0.1
  * Author:            Adiscon GmbH
- * Text Domain:       wp-outdated-content
+ * Text Domain:       adiscon-outdated-content
  * Domain Path:       /languages
  * Requires at least: 6.0
  * Requires PHP:      7.4
@@ -24,8 +24,8 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         private static $instance = null;
 
         const VERSION    = '1.0.1';
-        const OPTION_KEY = 'wp_outdated_content';
-        const OPTION_KEY_OLD = 'adiscon_outdated_content';
+        const OPTION_KEY = 'adiscon_outdated_content';
+        const OPTION_KEY_OLD = 'adiscon_outdated_content_old';
 
         private function __construct() {
             add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
@@ -59,11 +59,11 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         public static function defaults() {
 			$age_basis_default = 'modified';
 			$label_warn_default = $age_basis_default === 'modified'
-				? __( 'Outdated content notice: This article last update was {age_months} month(s) ago and may be outdated.', 'wp-outdated-content' )
-				: __( 'Outdated content notice: This article is {age_months} months old and may be outdated.', 'wp-outdated-content' );
+				? __( 'Outdated content notice: This article last update was {age_months} month(s) ago and may be outdated.', 'adiscon-outdated-content' )
+				: __( 'Outdated content notice: This article is {age_months} months old and may be outdated.', 'adiscon-outdated-content' );
 			$label_danger_default = $age_basis_default === 'modified'
-				? __( 'Outdated content warning: This article last update was {age_years} year(s) ago and likely outdated.', 'wp-outdated-content' )
-				: __( 'Outdated content warning: This article is {age_years} years old and likely outdated.', 'wp-outdated-content' );
+				? __( 'Outdated content warning: This article last update was {age_years} year(s) ago and likely outdated.', 'adiscon-outdated-content' )
+				: __( 'Outdated content warning: This article is {age_years} years old and likely outdated.', 'adiscon-outdated-content' );
 
 			return [
 				'enable'              => 1,
@@ -122,38 +122,38 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         }
 
         public function register_settings() {
-            register_setting( 'wp_outdated_content', self::OPTION_KEY, [ $this, 'sanitize_options' ] );
+            register_setting( 'adiscon_outdated_content', self::OPTION_KEY, [ $this, 'sanitize_options' ] );
 
-            add_settings_section( 'aoc_docs', __( 'Documentation', 'wp-outdated-content' ), [ $this, 'render_docs_section' ], 'wp_outdated_content' );
-            add_settings_section( 'aoc_general', __( 'General', 'wp-outdated-content' ), '__return_false', 'wp_outdated_content' );
-            add_settings_section( 'aoc_labels', __( 'Labels', 'wp-outdated-content' ), '__return_false', 'wp_outdated_content' );
-            add_settings_section( 'aoc_colors', __( 'Colors', 'wp-outdated-content' ), '__return_false', 'wp_outdated_content' );
+            add_settings_section( 'aoc_docs', __( 'Documentation', 'adiscon-outdated-content' ), [ $this, 'render_docs_section' ], 'adiscon_outdated_content' );
+            add_settings_section( 'aoc_general', __( 'General', 'adiscon-outdated-content' ), '__return_false', 'adiscon_outdated_content' );
+            add_settings_section( 'aoc_labels', __( 'Labels', 'adiscon-outdated-content' ), '__return_false', 'adiscon_outdated_content' );
+            add_settings_section( 'aoc_colors', __( 'Colors', 'adiscon-outdated-content' ), '__return_false', 'adiscon_outdated_content' );
 
-            $this->add_field( 'enable', 'aoc_general', __( 'Enable', 'wp-outdated-content' ), 'checkbox' );
-            $this->add_field( 'css_enable', 'aoc_general', __( 'Load built-in CSS', 'wp-outdated-content' ), 'checkbox' );
-            $this->add_field( 'theme_styling', 'aoc_general', __( 'Use theme styling (colors and label style)', 'wp-outdated-content' ), 'checkbox' );
-            $this->add_field( 'jsonld_enable', 'aoc_general', __( 'Output JSON-LD', 'wp-outdated-content' ), 'checkbox' );
-            $this->add_field( 'jsonld_type', 'aoc_general', __( 'JSON-LD type(s)', 'wp-outdated-content' ), 'jsonld_types' );
-            $this->add_field( 'post_types', 'aoc_general', __( 'Post types', 'wp-outdated-content' ), 'post_types' );
-            $this->add_field( 'age_basis', 'aoc_general', __( 'Age basis', 'wp-outdated-content' ), 'age_basis' );
-            $this->add_field( 'warn_months', 'aoc_general', __( 'Warn threshold (months)', 'wp-outdated-content' ), 'number' );
-            $this->add_field( 'danger_months', 'aoc_general', __( 'Danger threshold (months)', 'wp-outdated-content' ), 'number' );
+            $this->add_field( 'enable', 'aoc_general', __( 'Enable', 'adiscon-outdated-content' ), 'checkbox' );
+            $this->add_field( 'css_enable', 'aoc_general', __( 'Load built-in CSS', 'adiscon-outdated-content' ), 'checkbox' );
+            $this->add_field( 'theme_styling', 'aoc_general', __( 'Use theme styling (colors and label style)', 'adiscon-outdated-content' ), 'checkbox' );
+            $this->add_field( 'jsonld_enable', 'aoc_general', __( 'Output JSON-LD', 'adiscon-outdated-content' ), 'checkbox' );
+            $this->add_field( 'jsonld_type', 'aoc_general', __( 'JSON-LD type(s)', 'adiscon-outdated-content' ), 'jsonld_types' );
+            $this->add_field( 'post_types', 'aoc_general', __( 'Post types', 'adiscon-outdated-content' ), 'post_types' );
+            $this->add_field( 'age_basis', 'aoc_general', __( 'Age basis', 'adiscon-outdated-content' ), 'age_basis' );
+            $this->add_field( 'warn_months', 'aoc_general', __( 'Warn threshold (months)', 'adiscon-outdated-content' ), 'number' );
+            $this->add_field( 'danger_months', 'aoc_general', __( 'Danger threshold (months)', 'adiscon-outdated-content' ), 'number' );
 
-            $this->add_field( 'label_warn', 'aoc_labels', __( 'Warn label', 'wp-outdated-content' ), 'textarea' );
-            $this->add_field( 'label_danger', 'aoc_labels', __( 'Danger label', 'wp-outdated-content' ), 'textarea' );
+            $this->add_field( 'label_warn', 'aoc_labels', __( 'Warn label', 'adiscon-outdated-content' ), 'textarea' );
+            $this->add_field( 'label_danger', 'aoc_labels', __( 'Danger label', 'adiscon-outdated-content' ), 'textarea' );
 
-            $this->add_field( 'warn_bg', 'aoc_colors', __( 'Warn background', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'warn_border', 'aoc_colors', __( 'Warn border', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_bg', 'aoc_colors', __( 'Danger background', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_border', 'aoc_colors', __( 'Danger border', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'warn_text', 'aoc_colors', __( 'Warn text', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_text', 'aoc_colors', __( 'Danger text', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'warn_bg_dark', 'aoc_colors', __( 'Warn background (dark)', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'warn_border_dark', 'aoc_colors', __( 'Warn border (dark)', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_bg_dark', 'aoc_colors', __( 'Danger background (dark)', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_border_dark', 'aoc_colors', __( 'Danger border (dark)', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'warn_text_dark', 'aoc_colors', __( 'Warn text (dark)', 'wp-outdated-content' ), 'color' );
-            $this->add_field( 'danger_text_dark', 'aoc_colors', __( 'Danger text (dark)', 'wp-outdated-content' ), 'color' );
+            $this->add_field( 'warn_bg', 'aoc_colors', __( 'Warn background', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'warn_border', 'aoc_colors', __( 'Warn border', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_bg', 'aoc_colors', __( 'Danger background', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_border', 'aoc_colors', __( 'Danger border', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'warn_text', 'aoc_colors', __( 'Warn text', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_text', 'aoc_colors', __( 'Danger text', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'warn_bg_dark', 'aoc_colors', __( 'Warn background (dark)', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'warn_border_dark', 'aoc_colors', __( 'Warn border (dark)', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_bg_dark', 'aoc_colors', __( 'Danger background (dark)', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_border_dark', 'aoc_colors', __( 'Danger border (dark)', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'warn_text_dark', 'aoc_colors', __( 'Warn text (dark)', 'adiscon-outdated-content' ), 'color' );
+            $this->add_field( 'danger_text_dark', 'aoc_colors', __( 'Danger text (dark)', 'adiscon-outdated-content' ), 'color' );
         }
 
         private function add_field( $key, $section, $label, $type ) {
@@ -165,13 +165,13 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
                     $val  = isset( $opts[ $key ] ) ? $opts[ $key ] : '';
                     $name = self::OPTION_KEY . '[' . esc_attr( $key ) . ']';
                     if ( $type === 'checkbox' ) {
-                        echo '<label><input type="checkbox" name="' . esc_attr( $name ) . '" value="1" ' . checked( ! empty( $val ), true, false ) . '> ' . esc_html__( 'Enabled', 'wp-outdated-content' ) . '</label>';
+                        echo '<label><input type="checkbox" name="' . esc_attr( $name ) . '" value="1" ' . checked( ! empty( $val ), true, false ) . '> ' . esc_html__( 'Enabled', 'adiscon-outdated-content' ) . '</label>';
                     } elseif ( $type === 'number' ) {
                         echo '<input type="number" min="1" step="1" name="' . esc_attr( $name ) . '" value="' . esc_attr( (string) $val ) . '" class="small-text">';
                     } elseif ( $type === 'textarea' ) {
                         echo '<textarea name="' . esc_attr( $name ) . '" rows="3" class="large-text">' . esc_textarea( (string) $val ) . '</textarea>';
                         if ( in_array( $key, [ 'label_warn', 'label_danger' ], true ) ) {
-                            echo '<p class="description">' . esc_html__( 'Tokens: {age_days}, {age_months}, {age_years}, {published_date}, {company}', 'wp-outdated-content' ) . '</p>';
+                            echo '<p class="description">' . esc_html__( 'Tokens: {age_days}, {age_months}, {age_years}, {published_date}, {company}', 'adiscon-outdated-content' ) . '</p>';
                         }
                     } elseif ( $type === 'post_types' ) {
                         $selected = [];
@@ -186,7 +186,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
                             $label_pt = isset( $obj->labels->singular_name ) ? $obj->labels->singular_name : $slug;
                             echo '<label style="display:inline-block;margin:4px 12px 4px 0"><input type="checkbox" name="' . esc_attr( $name_many ) . '" value="' . esc_attr( $slug ) . '" ' . checked( in_array( $slug, $selected, true ), true, false ) . '> ' . esc_html( $label_pt ) . '</label>';
                         }
-                        echo '<p class="description">' . esc_html__( 'Select post types that should display the outdated notice.', 'wp-outdated-content' ) . '</p>';
+                        echo '<p class="description">' . esc_html__( 'Select post types that should display the outdated notice.', 'adiscon-outdated-content' ) . '</p>';
                     } elseif ( $type === 'jsonld_types' ) {
                         $allowed = [ 'Article', 'BlogPosting', 'NewsArticle', 'WebPage' ];
                         $selected = [];
@@ -199,31 +199,31 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
                         foreach ( $allowed as $opt ) {
                             echo '<label style="display:inline-block;margin:4px 12px 4px 0"><input type="checkbox" name="' . esc_attr( $name_many ) . '" value="' . esc_attr( $opt ) . '" ' . checked( in_array( $opt, $selected, true ), true, false ) . '> ' . esc_html( $opt ) . '</label>';
                         }
-                        echo '<p class="description">' . esc_html__( 'Select one or more schema.org types. First selected will be used as @type; the rest will appear in additionalType.', 'wp-outdated-content' ) . '</p>';
+                        echo '<p class="description">' . esc_html__( 'Select one or more schema.org types. First selected will be used as @type; the rest will appear in additionalType.', 'adiscon-outdated-content' ) . '</p>';
                     } elseif ( $type === 'age_basis' ) {
                         $current = in_array( (string) $val, [ 'modified', 'published' ], true ) ? (string) $val : 'modified';
                         echo '<select name="' . esc_attr( $name ) . '">';
-                        echo '<option value="modified" ' . selected( $current, 'modified', false ) . '>' . esc_html__( 'Last modified date', 'wp-outdated-content' ) . '</option>';
-                        echo '<option value="published" ' . selected( $current, 'published', false ) . '>' . esc_html__( 'Publish date', 'wp-outdated-content' ) . '</option>';
+                        echo '<option value="modified" ' . selected( $current, 'modified', false ) . '>' . esc_html__( 'Last modified date', 'adiscon-outdated-content' ) . '</option>';
+                        echo '<option value="published" ' . selected( $current, 'published', false ) . '>' . esc_html__( 'Publish date', 'adiscon-outdated-content' ) . '</option>';
                         echo '</select>';
-                        echo '<p class="description">' . esc_html__( 'Used for age calculation and the displayed date.', 'wp-outdated-content' ) . '</p>';
+                        echo '<p class="description">' . esc_html__( 'Used for age calculation and the displayed date.', 'adiscon-outdated-content' ) . '</p>';
                     } elseif ( $type === 'color' ) {
 						echo '<input type="text" class="regular-text wpoc-color" name="' . esc_attr( $name ) . '" value="' . esc_attr( (string) $val ) . '" placeholder="#rrggbb">';
                     } else {
                         echo '<input type="text" class="regular-text" name="' . esc_attr( $name ) . '" value="' . esc_attr( (string) $val ) . '">';
                     }
                 },
-                'wp_outdated_content',
+                'adiscon_outdated_content',
                 $section
             );
         }
 
         public function register_menu() {
             add_options_page(
-                __( 'WP Outdated Content', 'wp-outdated-content' ),
-                __( 'WP Outdated Content', 'wp-outdated-content' ),
+                __( 'Adiscon Outdated Content', 'adiscon-outdated-content' ),
+                __( 'Adiscon Outdated Content', 'adiscon-outdated-content' ),
                 'manage_options',
-                'wp_outdated_content',
+                'adiscon_outdated_content',
                 [ $this, 'render_settings_page' ]
             );
         }
@@ -233,17 +233,17 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
                 return;
             }
             echo '<div class="wrap">';
-            echo '<h1>' . esc_html__( 'WP Outdated Content', 'wp-outdated-content' ) . '</h1>';
+            echo '<h1>' . esc_html__( 'Adiscon Outdated Content', 'adiscon-outdated-content' ) . '</h1>';
             echo '<form method="post" action="options.php">';
-            settings_fields( 'wp_outdated_content' );
-            do_settings_sections( 'wp_outdated_content' );
+            settings_fields( 'adiscon_outdated_content' );
+            do_settings_sections( 'adiscon_outdated_content' );
             submit_button();
             echo '</form>';
             echo '</div>';
         }
 
 		public function admin_enqueue( $hook_suffix ) {
-			if ( $hook_suffix !== 'settings_page_wp_outdated_content' ) {
+			if ( $hook_suffix !== 'settings_page_adiscon_outdated_content' ) {
 				return;
 			}
 			wp_enqueue_style( 'wp-color-picker' );
@@ -346,18 +346,12 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
 
         public function enqueue_frontend_assets() {
             $opts = $this->get_options();
-            $css_enabled = apply_filters( 'wp_outdated_css_enabled', ! empty( $opts['css_enable'] ) );
-            if ( function_exists( 'apply_filters_deprecated' ) ) {
-                $css_enabled = apply_filters_deprecated( 'adiscon_outdated_css_enabled', [ $css_enabled ], '1.0.1', 'wp_outdated_css_enabled' );
-            }
-            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
-            if ( function_exists( 'apply_filters_deprecated' ) ) {
-                $use_theme_styling = apply_filters_deprecated( 'adiscon_outdated_use_theme_styling', [ $use_theme_styling ], '1.0.1', 'wp_outdated_use_theme_styling' );
-            }
+            $css_enabled = apply_filters( 'adiscon_outdated_css_enabled', ! empty( $opts['css_enable'] ) );
+            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
             if ( is_admin() || empty( $opts['enable'] ) || ! $css_enabled ) {
                 return;
             }
-            $handle = 'wp-outdated-content';
+            $handle = 'adiscon-outdated-content';
             $src    = plugins_url( 'assets/frontend.css', __FILE__ );
             wp_enqueue_style( $handle, $src, [], self::VERSION );
             if ( ! $use_theme_styling ) {
@@ -385,29 +379,29 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         }
 
         public function render_docs_section() {
-            echo '<div id="wp-outdated-docs">';
-            echo '<h2 id="docs">' . esc_html__( 'How it works', 'wp-outdated-content' ) . '</h2>';
-            echo '<p>' . esc_html__( 'This plugin prepends an accessible notice to selected post types if the content age exceeds your thresholds.', 'wp-outdated-content' ) . '</p>';
-            echo '<h3>' . esc_html__( 'JSON-LD Output', 'wp-outdated-content' ) . '</h3>';
-            echo '<p>' . esc_html__( 'When enabled, a JSON-LD block is emitted near the notice to help crawlers and AI systems detect outdated content. It includes the schema.org type, publish/modified dates, an explicit outdated state, and the content age in days/months/years.', 'wp-outdated-content' ) . '</p>';
-            echo '<p><strong>' . esc_html__( 'Type', 'wp-outdated-content' ) . ':</strong> ' . esc_html__( 'Article (default). You can set BlogPosting, NewsArticle, or WebPage.', 'wp-outdated-content' ) . '</p>';
-            echo '<h3>' . esc_html__( 'Tokens for labels', 'wp-outdated-content' ) . '</h3>';
+            echo '<div id="adiscon-outdated-docs">';
+            echo '<h2 id="docs">' . esc_html__( 'How it works', 'adiscon-outdated-content' ) . '</h2>';
+            echo '<p>' . esc_html__( 'This plugin prepends an accessible notice to selected post types if the content age exceeds your thresholds.', 'adiscon-outdated-content' ) . '</p>';
+            echo '<h3>' . esc_html__( 'JSON-LD Output', 'adiscon-outdated-content' ) . '</h3>';
+            echo '<p>' . esc_html__( 'When enabled, a JSON-LD block is emitted near the notice to help crawlers and AI systems detect outdated content. It includes the schema.org type, publish/modified dates, an explicit outdated state, and the content age in days/months/years.', 'adiscon-outdated-content' ) . '</p>';
+            echo '<p><strong>' . esc_html__( 'Type', 'adiscon-outdated-content' ) . ':</strong> ' . esc_html__( 'Article (default). You can set BlogPosting, NewsArticle, or WebPage.', 'adiscon-outdated-content' ) . '</p>';
+            echo '<h3>' . esc_html__( 'Tokens for labels', 'adiscon-outdated-content' ) . '</h3>';
             echo '<ul style="list-style:disc;margin-left:20px">';
-            echo '<li><code>{age_days}</code> — ' . esc_html__( 'Age in days', 'wp-outdated-content' ) . '</li>';
-            echo '<li><code>{age_months}</code> — ' . esc_html__( 'Age in months (approx.)', 'wp-outdated-content' ) . '</li>';
-            echo '<li><code>{age_years}</code> — ' . esc_html__( 'Age in years (approx.)', 'wp-outdated-content' ) . '</li>';
-            echo '<li><code>{published_date}</code> — ' . esc_html__( 'Localized date (publish or modified, based on setting)', 'wp-outdated-content' ) . '</li>';
-            echo '<li><code>{company}</code> — ' . esc_html__( 'Company name', 'wp-outdated-content' ) . '</li>';
+            echo '<li><code>{age_days}</code> — ' . esc_html__( 'Age in days', 'adiscon-outdated-content' ) . '</li>';
+            echo '<li><code>{age_months}</code> — ' . esc_html__( 'Age in months (approx.)', 'adiscon-outdated-content' ) . '</li>';
+            echo '<li><code>{age_years}</code> — ' . esc_html__( 'Age in years (approx.)', 'adiscon-outdated-content' ) . '</li>';
+            echo '<li><code>{published_date}</code> — ' . esc_html__( 'Localized date (publish or modified, based on setting)', 'adiscon-outdated-content' ) . '</li>';
+            echo '<li><code>{company}</code> — ' . esc_html__( 'Company name', 'adiscon-outdated-content' ) . '</li>';
             echo '</ul>';
-            echo '<p>' . esc_html__( 'Tip: You can override the state, threshold, or label per post via the sidebar meta box.', 'wp-outdated-content' ) . '</p>';
+            echo '<p>' . esc_html__( 'Tip: You can override the state, threshold, or label per post via the sidebar meta box.', 'adiscon-outdated-content' ) . '</p>';
             echo '</div>';
         }
 
         public function plugin_action_links( $links ) {
-            $settings_url = admin_url( 'options-general.php?page=wp_outdated_content' );
+            $settings_url = admin_url( 'options-general.php?page=adiscon_outdated_content' );
             $docs_url = $settings_url . '#docs';
-            $settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'wp-outdated-content' ) . '</a>';
-            $docs_link = '<a href="' . esc_url( $docs_url ) . '">' . esc_html__( 'Documentation', 'wp-outdated-content' ) . '</a>';
+            $settings_link = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'adiscon-outdated-content' ) . '</a>';
+            $docs_link = '<a href="' . esc_url( $docs_url ) . '">' . esc_html__( 'Documentation', 'adiscon-outdated-content' ) . '</a>';
             array_unshift( $links, $settings_link );
             $links[] = $docs_link;
             return $links;
@@ -415,10 +409,10 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
 
         public function plugin_row_meta( $links, $file ) {
             if ( $file === plugin_basename( __FILE__ ) ) {
-                $settings_url = admin_url( 'options-general.php?page=wp_outdated_content' );
+                $settings_url = admin_url( 'options-general.php?page=adiscon_outdated_content' );
                 $docs_url = $settings_url . '#docs';
-                $links[] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'wp-outdated-content' ) . '</a>';
-                $links[] = '<a href="' . esc_url( $docs_url ) . '">' . esc_html__( 'Documentation', 'wp-outdated-content' ) . '</a>';
+                $links[] = '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'adiscon-outdated-content' ) . '</a>';
+                $links[] = '<a href="' . esc_url( $docs_url ) . '">' . esc_html__( 'Documentation', 'adiscon-outdated-content' ) . '</a>';
             }
             return $links;
         }
@@ -453,7 +447,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             }
 
             $applicable = apply_filters( 'adiscon_outdated_is_applicable', true, $post );
-            $applicable = apply_filters( 'wp_outdated_is_applicable', $applicable, $post );
+            $applicable = apply_filters( 'adiscon_outdated_is_applicable', $applicable, $post );
             if ( ! $applicable ) {
                 return $content;
             }
@@ -499,7 +493,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             }
 
             $state = apply_filters( 'adiscon_outdated_state', $state, $post, $age_months, $warn_months, $danger_months );
-            $state = apply_filters( 'wp_outdated_state', $state, $post, $age_months, $warn_months, $danger_months );
+            $state = apply_filters( 'adiscon_outdated_state', $state, $post, $age_months, $warn_months, $danger_months );
             if ( $state === 'none' ) {
                 return $content;
             }
@@ -513,7 +507,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
                 '{company}'        => 'Adiscon',
             ];
             $tokens = apply_filters( 'adiscon_outdated_tokens', $tokens, $post );
-            $tokens = apply_filters( 'wp_outdated_tokens', $tokens, $post );
+            $tokens = apply_filters( 'adiscon_outdated_tokens', $tokens, $post );
 
             $label_template = '';
             if ( $custom_label !== '' ) {
@@ -523,17 +517,14 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             }
             $label = strtr( $label_template, $tokens );
             $label = apply_filters( 'adiscon_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
-            $label = apply_filters( 'wp_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
+            $label = apply_filters( 'adiscon_outdated_notice_text', $label, $state, $post, $age_months, $published_date );
 
-            $use_theme_styling = apply_filters( 'wp_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
-            if ( function_exists( 'apply_filters_deprecated' ) ) {
-                $use_theme_styling = apply_filters_deprecated( 'adiscon_outdated_use_theme_styling', [ $use_theme_styling ], '1.0.1', 'wp_outdated_use_theme_styling' );
-            }
+            $use_theme_styling = apply_filters( 'adiscon_outdated_use_theme_styling', ! empty( $opts['theme_styling'] ) );
             $theme_class = $use_theme_styling ? ' ocb--theme' : '';
             $html  = '<aside role="note" class="ocb ocb--' . esc_attr( $state ) . $theme_class . '">';
             $html .= '<span class="ocb-label">' . wp_kses_post( $label ) . '</span>';
             /* translators: %s: The date when the content was last updated */
-            $date_label = $age_basis === 'modified' ? _x( 'Last updated: %s', 'modified date', 'wp-outdated-content' ) : _x( 'Published: %s', 'published date', 'wp-outdated-content' );
+            $date_label = $age_basis === 'modified' ? _x( 'Last updated: %s', 'modified date', 'adiscon-outdated-content' ) : _x( 'Published: %s', 'published date', 'adiscon-outdated-content' );
             $html .= ' <span class="ocb-meta">' . esc_html( sprintf( $date_label, $published_date ) ) . '</span>';
             $html .= '</aside>';
 
@@ -571,7 +562,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             foreach ( get_post_types( [ 'public' => true ], 'names' ) as $post_type ) {
                 add_meta_box(
                     'aoc_meta',
-                    __( 'Outdated Content Notice', 'wp-outdated-content' ),
+                    __( 'Outdated Content Notice', 'adiscon-outdated-content' ),
                     [ $this, 'render_meta_box' ],
                     $post_type,
                     'side',
@@ -588,18 +579,18 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             $state = get_post_meta( $post->ID, 'ocb_state', true );
             $threshold = (int) get_post_meta( $post->ID, 'ocb_threshold_months', true );
             $label = (string) get_post_meta( $post->ID, 'ocb_label_custom', true );
-            echo '<p><label for="aoc_state"><strong>' . esc_html__( 'State override', 'wp-outdated-content' ) . '</strong></label><br/>';
+            echo '<p><label for="aoc_state"><strong>' . esc_html__( 'State override', 'adiscon-outdated-content' ) . '</strong></label><br/>';
             echo '<select id="aoc_state" name="aoc[state]">';
-            $options = [ '' => __( 'Default', 'wp-outdated-content' ), 'hide' => __( 'Hide', 'wp-outdated-content' ), 'warn' => __( 'Warn', 'wp-outdated-content' ), 'danger' => __( 'Danger', 'wp-outdated-content' ) ];
+            $options = [ '' => __( 'Default', 'adiscon-outdated-content' ), 'hide' => __( 'Hide', 'adiscon-outdated-content' ), 'warn' => __( 'Warn', 'adiscon-outdated-content' ), 'danger' => __( 'Danger', 'adiscon-outdated-content' ) ];
             foreach ( $options as $val => $label_opt ) {
                 echo '<option value="' . esc_attr( $val ) . '" ' . selected( $state, $val, false ) . '>' . esc_html( $label_opt ) . '</option>';
             }
             echo '</select></p>';
-            echo '<p><label for="aoc_threshold"><strong>' . esc_html__( 'Warn threshold override (months)', 'wp-outdated-content' ) . '</strong></label><br/>';
+            echo '<p><label for="aoc_threshold"><strong>' . esc_html__( 'Warn threshold override (months)', 'adiscon-outdated-content' ) . '</strong></label><br/>';
             echo '<input type="number" id="aoc_threshold" name="aoc[threshold]" min="0" step="1" value="' . esc_attr( (string) $threshold ) . '" class="small-text"></p>';
-            echo '<p><label for="aoc_label"><strong>' . esc_html__( 'Custom label template', 'wp-outdated-content' ) . '</strong></label><br/>';
+            echo '<p><label for="aoc_label"><strong>' . esc_html__( 'Custom label template', 'adiscon-outdated-content' ) . '</strong></label><br/>';
             echo '<textarea id="aoc_label" name="aoc[label]" rows="3" class="widefat">' . esc_textarea( $label ) . '</textarea>';
-            echo '<span class="description">' . esc_html__( 'Tokens: {age_days}, {age_months}, {age_years}, {published_date}, {company}', 'wp-outdated-content' ) . '</span></p>';
+            echo '<span class="description">' . esc_html__( 'Tokens: {age_days}, {age_months}, {age_years}, {published_date}, {company}', 'adiscon-outdated-content' ) . '</span></p>';
         }
 
         public function save_post_meta( $post_id, $post ) {
