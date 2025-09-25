@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Outdated Content 1.0.0\n"
+"Project-Id-Version: Adiscon Outdated Content 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-18 00:00+0000\n"
 "MIME-Version: 1.0\n"
@@ -10,6 +10,6 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
 "X-Generator: Handcrafted\n"
-"X-Domain: wp-outdated-content\n"
+"X-Domain: adiscon-outdated-content\n"
 
 

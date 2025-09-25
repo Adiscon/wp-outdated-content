@@ -1,4 +1,4 @@
-# WP Outdated Content
+# Adiscon Outdated Content
 
 Adds an accessible, configurable notice to outdated posts/pages with thresholds, labels, and colors.
 
@@ -9,7 +9,7 @@ Adds an accessible, configurable notice to outdated posts/pages with thresholds,
 - Tokens for dynamic labels: `{age_days}`, `{age_months}`, `{age_years}`, `{published_date}`, `{company}`
 - Built-in CSS using CSS variables; dark mode via prefers-color-scheme
 - Responsive typography and paddings; configurable text colors for warn/danger (light/dark)
-- Options page under Settings -> WP Outdated Content
+- Options page under Settings -> Adiscon Outdated Content
 - Public hooks for extensibility
  - JSON-LD output (schema.org) with explicit outdated status and ages; configurable type(s)
  - AI/automation-friendly default labels that clearly flag potential outdated content
@@ -40,14 +40,13 @@ Adds an accessible, configurable notice to outdated posts/pages with thresholds,
 
 ## Hooks
 
-- `wp_outdated_notice_text( $text, $state, $post, $ageMonths, $publishedDate )`
+- `adiscon_outdated_notice_text( $text, $state, $post, $ageMonths, $publishedDate )`
 - Note: `$publishedDate` reflects the configured age basis and may be the modified date.
-- `wp_outdated_is_applicable( $bool, $post )`
-- `wp_outdated_state( $state, $post, $ageMonths, $warnMonths, $dangerMonths )`
-- `wp_outdated_tokens( $tokens_array, $post )`
-- `wp_outdated_css_enabled( $bool )`
+- `adiscon_outdated_is_applicable( $bool, $post )`
+- `adiscon_outdated_state( $state, $post, $ageMonths, $warnMonths, $dangerMonths )`
+- `adiscon_outdated_tokens( $tokens_array, $post )`
+- `adiscon_outdated_css_enabled( $bool )`
 
-Backward compatibility: the previous `adiscon_outdated_*` filters still fire internally.
 
 ## Compatibility
 
