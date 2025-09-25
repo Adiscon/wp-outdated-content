@@ -52,7 +52,8 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         }
 
         public function load_textdomain() {
-            load_plugin_textdomain( 'wp-outdated-content', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+            // WordPress automatically loads plugin translations since 4.6
+            // No manual load_plugin_textdomain() needed for WordPress.org hosted plugins
         }
 
         public static function defaults() {
@@ -531,6 +532,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             $theme_class = $use_theme_styling ? ' ocb--theme' : '';
             $html  = '<aside role="note" class="ocb ocb--' . esc_attr( $state ) . $theme_class . '">';
             $html .= '<span class="ocb-label">' . wp_kses_post( $label ) . '</span>';
+            /* translators: %s: The date when the content was last updated */
             $date_label = $age_basis === 'modified' ? _x( 'Last updated: %s', 'modified date', 'wp-outdated-content' ) : _x( 'Published: %s', 'published date', 'wp-outdated-content' );
             $html .= ' <span class="ocb-meta">' . esc_html( sprintf( $date_label, $published_date ) ) . '</span>';
             $html .= '</aside>';
@@ -601,7 +603,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
         }
 
         public function save_post_meta( $post_id, $post ) {
-            if ( ! isset( $_POST['aoc_meta_nonce'] ) || ! wp_verify_nonce( $_POST['aoc_meta_nonce'], 'aoc_meta_box' ) ) {
+            if ( ! isset( $_POST['aoc_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['aoc_meta_nonce'] ) ), 'aoc_meta_box' ) ) {
                 return;
             }
             if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -613,7 +615,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
             if ( $post->post_type === 'revision' ) {
                 return;
             }
-            $data = isset( $_POST['aoc'] ) && is_array( $_POST['aoc'] ) ? wp_unslash( $_POST['aoc'] ) : [];
+            $data = isset( $_POST['aoc'] ) && is_array( $_POST['aoc'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['aoc'] ) ) : [];
             $state = isset( $data['state'] ) ? sanitize_text_field( (string) $data['state'] ) : '';
             if ( ! in_array( $state, [ '', 'hide', 'warn', 'danger' ], true ) ) {
                 $state = '';
