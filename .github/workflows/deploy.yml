@@ -41,6 +41,7 @@ jobs:
             --exclude ".github" \
             --exclude "$BUILD_DIR" \
             --exclude ".wordpress-org" \
+            --exclude ".*" \
             ./ "$BUILD_DIR/$SLUG"/
           (cd "$BUILD_DIR" && zip -r "${SLUG}-${VERSION}.zip" "$SLUG")
           echo "zip_path=${PWD}/${BUILD_DIR}/${SLUG}-${VERSION}.zip" >> "$GITHUB_OUTPUT"
