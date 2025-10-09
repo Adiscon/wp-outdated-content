@@ -1,10 +1,10 @@
 === Adiscon Outdated Content ===
-Contributors: adiscon
+Contributors: adiscon, alorbach
 Tags: outdated, last updated, content age, notice, json-ld
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ Yes. Built-in styles adapt via prefers-color-scheme. You can also set separate t
 3. JSON-LD markup example (structured data)
 
 == Changelog ==
+
+= 1.0.2 =
+- Add alorbach to Contributors list
 
 = 1.0.1 =
 - Add age basis setting (default: modified); use selected basis for age and displayed date
