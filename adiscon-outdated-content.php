@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Adiscon Outdated Content
  * Description:       Adds an accessible, configurable notice to outdated posts/pages with thresholds, labels, and colors.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Adiscon GmbH
  * Text Domain:       adiscon-outdated-content
  * Domain Path:       /languages
@@ -23,7 +23,7 @@ if ( ! class_exists( 'Adiscon_Outdated_Content' ) ) {
     final class Adiscon_Outdated_Content {
         private static $instance = null;
 
-        const VERSION    = '1.0.1';
+        const VERSION    = '1.0.2';
         const OPTION_KEY = 'adiscon_outdated_content';
         const OPTION_KEY_OLD = 'adiscon_outdated_content_old';
 

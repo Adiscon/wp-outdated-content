@@ -61,5 +61,6 @@ Copyright (c) 2025 Adiscon GmbH
 
 ## Changelog
 
+- v1.0.2 -- Add alorbach to Contributors list
 - v1.0.1 -- Add age basis setting (default: modified); use selected basis for age and displayed date; enable WP color picker for color settings
 - v1.0.0 -- Initial release
